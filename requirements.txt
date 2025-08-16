@@ -1,0 +1,8 @@
+Flask
+nltk
+spacy
+numpy
+pandas
+Werkzeug
+torch>=2.2.0
+transformers>=4.42.0

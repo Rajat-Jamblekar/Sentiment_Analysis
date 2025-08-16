@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <title>Sentiment Analyzer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <header>
+    <h1>Sentiment Analyzer</h1>
+    <p class="muted">Model: <strong>{{ model_name }}</strong></p>
+  </header>
+
+  <main>
+    <section class="panel">
+      <form id="analyze-form">
+        <label for="text">Enter text</label>
+        <textarea id="text" name="text" rows="6" placeholder="Type or paste text here..."></textarea>
+
+        <div class="or">— or —</div>
+
+        <label for="file">Upload .txt file</label>
+        <input type="file" id="file" name="file" accept=".txt"/>
+
+        <button type="submit">Analyze</button>
+      </form>
+    </section>
+
+    <section class="panel">
+      <h2>Result</h2>
+      <div id="label" class="label">Waiting for input...</div>
+      <canvas id="barChart" height="110"></canvas>
+      <pre id="detail" class="detail"></pre>
+    </section>
+  </main>
+
+  <footer>
+    <p class="muted">Built for Assignment 2 – PS-2 (NLP Applications).</p>
+  </footer>
+
+  <script>
+    // Chart.js bar chart with color codes for sentiment
+    let chartInstance = null;
+    function renderSentimentChart(scores) {
+      const ctx = document.getElementById('barChart').getContext('2d');
+      const data = {
+        labels: ['Positive', 'Neutral', 'Negative'],
+        datasets: [{
+          label: 'Sentiment Score',
+          data: [scores.positive, scores.neutral, scores.negative],
+          backgroundColor: [
+            '#10b981', // green for positive
+            '#3b82f6', // blue for neutral
+            '#ef4444'  // red for negative
+          ],
+          borderColor: [
+            '#059669', // dark green
+            '#2563eb', // dark blue
+            '#b91c1c'  // dark red
+          ],
+          borderWidth: 2
+        }]
+      };
+      const options = {
+        plugins: {
+          legend: { display: false }
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            grid: { color: '#e5e7eb' }
+          },
+          x: {
+            grid: { color: '#e5e7eb' }
+          }
+        }
+      };
+      // Destroy previous chart instance if exists
+      if (chartInstance) chartInstance.destroy();
+      chartInstance = new Chart(ctx, { type: 'bar', data, options });
+    }
+
+    // Handle form submission and display results
+    document.getElementById('analyze-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const formData = new FormData(this);
+      fetch('/api/analyze', { method: 'POST', body: formData })
+        .then(res => res.json())
+        .then(data => {
+          if (data.error) {
+            document.getElementById('label').textContent = data.error;
+            document.getElementById('detail').textContent = '';
+            if (chartInstance) chartInstance.destroy();
+            return;
+          }
+          document.getElementById('label').textContent = `Sentiment: ${data.label}`;
+          document.getElementById('detail').textContent = JSON.stringify(data.detail, null, 2);
+          if (data.scores) renderSentimentChart(data.scores);
+        });
+    });
+  </script>
+</body>
+</html>

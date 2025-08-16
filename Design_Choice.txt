@@ -1,0 +1,28 @@
+Design Choices
+Framework:
+I chose Flask for its simplicity and flexibility in building web applications. Flask allows easy routing and integration with Python-based NLP libraries.
+
+Frontend:
+The frontend uses plain HTML, CSS, and JavaScript for accessibility and ease of deployment. Chart.js was integrated for visualizing sentiment scores with color-coded bar charts, making results intuitive.
+
+Modular NLP Pipeline:
+Text preprocessing (tokenization, stopword removal, lemmatization) is separated into its own module for clarity and reusability. Sentiment analysis logic is encapsulated in a dedicated class, supporting both VADER and transformer-based models.
+
+User Input:
+The app accepts both direct text input and file uploads, increasing usability for different user scenarios.
+
+Challenges and Solutions
+NLTK Resource Errors:
+The app initially failed due to missing NLTK resources (e.g., punkt). This was resolved by checking resource availability and instructing users to download missing data.
+
+Frontend Styling Issues:
+There was a mismatch in CSS filenames (style.css vs. styles.css), causing the dark theme not to load. This was fixed by ensuring consistent naming in both the HTML and filesystem.
+
+Sentiment Visualization:
+Integrating Chart.js required careful handling of dynamic data and chart instance management to avoid rendering issues when updating results.
+
+Balanced Sentiment Detection:
+The model sometimes returned unexpected sentiment labels for mixed-input text. This was addressed by reviewing the scoring logic and providing clear feedback to users about how results are determined.
+
+Summary
+The design prioritizes modularity, user experience, and clear visualization. Challenges were overcome through careful debugging, user guidance, and iterative improvements to both backend and frontend components.
