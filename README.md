@@ -1,36 +1,47 @@
-# Sentiment Analyzer (Flask + NLTK / Transformers)
+# Sentiment Analysis Application
 
-## Why this design
-- **Meets assignment criteria**: Web UI, file upload, visualization (bar chart + label), NLP model, preprocessing, prediction.  
-- **Robust & fast**: Uses **NLTK VADER** by default (plug-and-play, no GPU).  
-- **Extensible**: Flip `USE_TRANSFORMER=1` to use **HuggingFace DistilBERT** for stronger semantics.  
-- **Clear separation**: `nlp/preprocess.py` (tokenization, stopwords, lemmatization) and
-  `nlp/sentiment.py` (model inference).  
-- **Visualization**: Chart.js ensures an easy, legible bar chart.
+## Overview
 
-## Running
-See the top-level instructions in the main response. Open `http://127.0.0.1:5000`.
+This is a sentiment analysis application built using Flask and Hugging Face's Transformers library. The application allows users to analyze the sentiment of text input, including support for multiple languages. It utilizes state-of-the-art transformer models like BERT and RoBERTa for accurate sentiment classification.
 
-### Switch to transformer model (optional)
-```bash
-# inside your venv, after installing extra deps from requirements.txt
-set USE_TRANSFORMER=1        # on Windows (cmd)
-export USE_TRANSFORMER=1     # on macOS/Linux (bash/zsh)
+## Features
+
+- Analyze sentiment of text input or uploaded `.txt` files.
+- Support for multiple languages using transformer models.
+- User-friendly web interface for easy interaction.
+- Detailed output including sentiment label and confidence scores.
+
+## Technologies Used
+
+- Python
+- Flask
+- Hugging Face Transformers
+- NLTK (Natural Language Toolkit)
+- HTML/CSS/JavaScript for frontend
+
+## Installation
+python -m venv venv
+source venv/bin/activate  # On Windows use `venv\Scripts\activate`
+
+pip install -r requirements.txt
+
+you will need to install nltk and download nltk punkt 
+
 python app.py
-Challenges & notes
-Preprocessing vs VADER: VADER benefits from keeping negations/emojis; heavy cleaning may slightly reduce performance. For pedagogy, we still show preprocessing and feed raw text to VADER while using the cleaned text for transformers.
+### Prerequisites
 
-Neutral class (transformer): SST-2 models are 2-class. We construct a neutral band from confidence around 0.5 to provide a 3-way output required by the UI.
+Make sure you have Python 3.6 or higher installed on your machine. You can download it from [python.org](https://www.python.org/downloads/).
 
-Uploaded files: We support UTF-8 .txt. For other encodings, we fallback with errors="ignore".
+### Clone the Repository
 
-Screenshots to capture for the report
-Home page before input
+```bash
+git clone https://github.com/Rajat-Jamblekar/Sentiment_Analysis.git
 
-Entered text & Analyze pressed
 
-Output label (color) + bar chart
+License
+This project is licensed under the MIT License - see the LICENSE file for details.
 
-File upload flow with .txt
-
-(Optional) Same text compared with VADER vs Transformer
+Acknowledgments
+Hugging Face for providing the Transformers library.
+NLTK for natural language processing tools.
+The open-source community for their contributions and support
